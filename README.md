@@ -273,7 +273,7 @@ For example, if the input slew is 60ps and load is 50fF delay would be x15. For 
 While creating clock tree we need to ensure that the skew very low for that we need to find delay using above method and take care of the issue at an early stage of CTS. \
 ## Setup timing analysis (with ideal clock):
 Ideal clock means clock tree not built (no skew). So on 0s clock reaches launch flop and at T(time period) it reached capture flop. So the delay of launch flop and combinational logic should be less than time period. But in practical case there should be a finite time require by the D input to be stable before a clock edge called setup time. So equation is Launch flop delay + combinational delay + setup time < time period.
- ![](Images/D4_3.png) \
+ ![](Images/D4_3.png) 
 ## Clock jitter:
 Clock is produced by PLL or some other source which is real practical source and it might not generate clock at exact times the clock edge time might have some variation than the expected time this is called clock jitter. We need to model the jitter in our equation, in worst case clock period could be less than expected hence setup equation becomes: \
 ```console
@@ -307,12 +307,16 @@ Post that we need to do timing analysis with the real clocks with skews. \
  Shielding breaks the coupling capacitance between critical and other nets. After shielding the clock nets we can do static timing analysis on the design. \
 The command to run cts in Openlane is `run_cts`: some of its configuration settings are `CTS_TARGET_SKEW`( target skew in ps), `CTS_ROOT_BUFFER`(name of cell inserted in tree), `CLOCK_TREE_SYNTH`(enable cts for triton cts), `CTS_TOLERANCE` (tradeoff between qor and runtime) 
 ```console
-	run_stc
+	run_cts
 ```
 After running cts flow it creates another netlist named as `{design name}.synthesis_cts.v` \
+\
  ![](Images/D4_6.PNG) \
+ \
  ![](Images/D4_7.PNG) \
+ \
 All the command run before like run_synthesis, run_placement, etc are procs of tcl which is similar to functions. They are present in scripts/tcl_commands/ inside the Openlane directrory. \
+\
  ![](Images/D4_8.PNG) 
 ## Timing analysis after CTS with real Clocks
 Static timing analysis after CTS becomes more practical, now the difference launch and capture clock edge will be different from the time period by the value of clock skew. \
