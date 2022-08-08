@@ -135,9 +135,12 @@ To view placed design in magic tool use below command:
 ```console
 magic -T ~/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def picorv32a.placement.def
 ```
-![](Images/D2_14.PNG) \
+![](Images/D2_14.PNG) 
+
+
 Placed design in magic tool. \
 ![](Images/D2_13_1.PNG) \
+![](Images/D2_13_2.PNG) \
 We can see endcap cells, tap cells, std cells, and pg grid being made. 
 
 ## Cell design flow:
