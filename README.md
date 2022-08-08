@@ -1,7 +1,7 @@
 # Advanced-PD-workshop-using-openlane-VSD
 ## This repo contains all the learnings and labs on Advanced PD workshop by VSD. It contains all the informations on RTL to GDSII implementation of a PICORV32 design using openlane flow.
 # Table of content
- - [Day 1 Inception of open-source EDA, OpenLANE and Sky130 PDK]
+ - [Day 1 Inception of open-source EDA, OpenLANE and Sky130 PDK](#day1-inception-of-open-source-eda-openlane-and-sky130-pdk)
   - [Introduction]
  - [Day 2]
  - [Day 3]
