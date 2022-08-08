@@ -199,5 +199,54 @@ For example we need to calculate the propagation delay for falling edge of a buf
 For example, to calculate transition time we subtract time on slew_high__rise_thr with time on slew_low_rise_thr. 
 
 # Day3: Design library cell using Magic Layout and ngspice characterization
+## 16 mask CMOS fabrication process
+It is a detailed process that is followed to fabricate CMOS circuits. It starts from p-substrate then on it various layers are laid followed by mask layer which mask certain part of the subsrtate on the exposed part of the mask UV rays are passed to remove certain layers. The process is repeated for 16 times as the name says after which we have both PMOS and NMOS creates as well as the routing metals above them are also created. \
+The whole process is very long and has been documented in a separate github repo: https://github.com/Santosh3672/16-mask-CMOS-fabrication-process \
+## SPICE simulation of standard cells:
+For SPICE simulation of any cell, first we need to create the spice deck which contains following information: \
+•	Input and output pin connection and connectivity between nmos, pmos, capacitances, etc. \
+•	Component values such as value of capacitances, W and L value. Input, output and supply voltage value is also defined. \
+•	Identify nodes: nodes are points between which we have devices or passive elements. \
+•	Naming of the nodes.  \
+Based on node names and component names and their values we can write the spice model in text which can be understood by the tool. \
+![](Images/D3_1.png) \
+In above example we can see circuit of inverter with all components values and nodes named. With those names and values the SPICE we defined the circuit textually followed by defining the input and output voltages and simulation environment. It is followed by calling spice library model from foundry that contains all the physical parameters required for simulation. \
+In CMOS the mobility of n carries is more than p type hence we need to have higher Wp/Lp than Wn/Ln so that switching threshold will be half of the Vin. It is required to equalize the rise and fall delay. \
+*Switching threshold (Vm):* It is the point where the DC characteristics of CMOS intersects with Vin = Vout curve. \
+![](Images/D3_2.png) \
+VSD cell design github repository: https://github.com/nickson-jose/vsdstdcelldesign
+
+## Inverter design using openlane:
+The nwell and pwell contact are made to Local interconnect using nsubstratecontact and psubstratecontact respectively and LI are connetcet to M1 using licon. Then as per above theory we have built the cell layout we need to ensure there are no DRC issue. \
+Then we need to ensure that the cell is functioning as we want we can do it using SPICE modelling in ngspice. For that we need to extract parasitics from layout. By creating ext file on magic command is `extract all`. Which is followed by setting threshold R and C using `ext2spice cthresh 0 rthresh 0`. Then we create the spice file using `ext2spice` command. \
+```console
+	extract all
+	ext2spice cthresh 0 rthresh 0
+	ext2spice
+```
+![](Images/D3_3.png) \
+Spice file created from magic layout tool for ngspice analysis \
+\
+Here the input voltage and supply voltages are not defined as they were not defined in magic tool. Also the model files of mos are to be defined that came with the github repo. For simulation we also need to define the simulation type in the spice netlist. After which the SPICE file looks like: \
+ ![](Images/D3_4.png) \
+\
+Now we are ready to run spice simulation we can invoke ngspice using `ngspice {spice_file_name}`.
+On ngspice terminal we can plot IO curves using `plot y vs time a` command:
+```console
+	ngspice {spice_file_name}
+	plot y vs time a
+```
+ ![](Images/D3_5.png) \
+\
+## Cell characterization from NGspice waveform:
+*Rise transition:* Time taken by rising signal at 20% = 2.181 ns \
+		Time taken by rising signal at 80% = 2.245 ns \
+Rise transition = (2.245-2.181) ns. = 64 ps. \
+Similarly, *fall transition* = 4.095 ns - 4.052 ns = 43 ps. \
+\
+*Propagation delay fall* = 4.077ns – 4.05ns = 27ps \
+*Rise delay* = 2.21ns – 2.15ns = 60ps \
+
+
 # Day4: Pre-layout timing analysis and importance of good clock tree
 # Day5: Final steps for RTL2GDS using tritonRoute and openSTA
