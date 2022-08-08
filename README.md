@@ -2,14 +2,25 @@
 This repo contains all the learnings and labs on Advanced PD workshop by VSD. It contains all the informations on RTL to GDSII implementation of a PICORV32 design using openlane flow.
 # Table of content
 - [Day 1 Inception of open-source EDA, OpenLANE and Sky130 PDK](#day1-inception-of-open-source-eda-openlane-and-sky130-pdk)
-  - [Introduction](#introduction)
-- [Day2: Good floorplan vs bad floorplan]
-- [Day3: Design library cell using Magic Layout and ngspice characterization]
-- [Day4: Pre-layout timing analysis and importance of good clock tree]
-- [Day5: Final steps for RTL2GDS using tritonRoute and openSTA]
+  - [Introduction to basic IC design terminologies](#introduction)
+  - [Introduction to RISCV ISA](#introduction-to-riscv-isa)
+  - [SoC Design using Openlane](#soc-design-using-openlane)
+  - [Openlane Directory sturcture](#openlane-directory-sturcture)
+- [Day2: Good floorplan vs bad floorplan](#day2-good-floorplan-vs-bad-floorplan)
+  - [Deciding utilization ratio and aspect ratio](#deciding-utilization-ratio-and-aspect-ratio)	
+  - [Defining location of preplaced cells](#defining-location-of-preplaced-cells)
+  - [Power planning](#power-planning)
+  - [Viewing def file in magic](#viewing-def-file-in-magic)
+  - [Binding netlist with physical cells](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#binding-netlist-with-physical-cells)
+  - [Congestion aware placement in Openlane using RePlAce](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#congestion-aware-placement-in-openlane-using-replace)
+  - [Cell design flow](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#cell-design-flow)
+  - [Timing characterization](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#timing-characterization)
+- [Day3: Design library cell using Magic Layout and ngspice characterization](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#day3-design-library-cell-using-magic-layout-and-ngspice-characterization)
+- [Day4: Pre-layout timing analysis and importance of good clock tree](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#day4-pre-layout-timing-analysis-and-importance-of-good-clock-tree)
+- [Day5: Final steps for RTL2GDS using tritonRoute and openSTA](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#day5-final-steps-for-rtl2gds-using-tritonroute-and-opensta)
  
 # Day1: Inception of open-source EDA, OpenLANE and Sky130 PDK
-## Introduction:
+## Introduction to basic IC design terminologies:
 During ASIC design we will come across some terms more frequenlty few of them are listed below: \
 **Pad:** Used to communicate with outside world. \
 **Core:** Area where the digital logic sits. \
@@ -78,7 +89,7 @@ Adding Decap cells to the preplaced cells: The physical wires have physical dime
 To prevent this phenomena, we add decoupling capacitance: \
 ![](Images/D2_2.png "Decoupling capacitor supplies energy to the cells when supply voltage is low")
 As capacitor is an energy storing device it will deliver voltage to the logic near them when the supply voltage is low prevents any voltage drop across the logic. It decouples the circuit from main supply. \
-![](Images/D2_3.png "Design with preplaced macros and decap cells around them")
+![](Images/D2_3.png "Design with preplaced macros and decap cells around them") \
 Design with preplaced cells and decap placed around them.
 ## Power planning: 
 We can have many macros, memories or std cells in the design and they can have a huge current demand. We can’t have decoupling capacitor on each of the nets because of Voltage droop and Ground bounce.
@@ -145,17 +156,17 @@ We can see endcap cells, tap cells, std cells, and pg grid being made.
 
 ## Cell design flow:
 
-As discussed earlier we have library of the std cells with different varieties and each have multiple models for different tools. The cell design flow is discussed here. 
+As discussed earlier we have library of the std cells with different varieties and each have multiple models for different tools. The cell design flow is discussed here. \
 ![](Images/D2_15.png) \
 For cell design flow we need inputs those are PDKs, DRC & LVS rules (required by foundry), SPICE models (with all physical parameters), library and user defined specs.
 Dimension of cell: the height of the cell should be same for all cells so that VSS and VDD will be laid. Width of the cell can be varied wider cells for high drive strength cells. 
 Supply voltage: It will be determined by the user (top level designer) and cell designer has to design cells based on that voltage. 
 Metal layers: It could be on M1 or M2 or M3 based on user requirement.
 Then based on the given input cell designer will start designing cell. Designer does spice simulation to design circuit like makil w/l of pmos double w/l of nmos, selecting w/l ratio for desired Id value. After which CDL(circuit descriptive language) is given as output.  
-Post that layout design will start. To design layout we first get the CMOS design of the circuit with PMOS and NMOS. Then derive the graphs of PMOS and NMOS network as shown below. 
+Post that layout design will start. To design layout we first get the CMOS design of the circuit with PMOS and NMOS. Then derive the graphs of PMOS and NMOS network as shown below. \
 ![](Images/D2_16.png) \
 Here we are discussing about Euler’s path + stick diagram method which gives layout with best performance and best area. In this method after we derive network graph we derive Euler’s path which is the path that is traversed once. For above example it is A-C-E-F-D-B.
-Then we create a stick diagram of the order of Euler’s path and make connection according to the design. Post that we convert it to layout while adhering to the foundry rules and user input rules.
+Then we create a stick diagram of the order of Euler’s path and make connection according to the design. Post that we convert it to layout while adhering to the foundry rules and user input rules. \
 ![](Images/D2_17.png) \
 
 With the final layout completed we will produce its GDSII, LED and extract its spice netlist (.cir).
