@@ -16,7 +16,7 @@ During ASIC design we will come across some terms more frequenlty few of them ar
 **Die:** Size of entire chip. \
 **Foundry:** Fabrication plant for semiconductor chips. \
 **Foundry IP’s:** IP’s supported by foundries. \
-![ASIC Chip](Images/D1_1.png?style=centerme)
+![ASIC Chip](Images/D1_1.png)
 
 ## Introduction to RISCV ISA
 RISCV ISA: (Reduced Instruction Set computer V) is an open source architecture of processor based on RISC principle also known as instruction set architecture. The hardware runs on low level opcode.
