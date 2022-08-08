@@ -11,11 +11,11 @@
 # Day1: Inception of open-source EDA, OpenLANE and Sky130 PDK
 ## Introduction:
 During ASIC design we will come across some terms more frequenlty few of them are listed below: \
-Pad: Used to communicate with outside world. \
-Core: Area where the digital logic sits. \
-Die: Size of entire chip. \
-Foundry: Fabrication plant for semiconductor chips. \
-Foundry IP’s: IP’s supported by foundries. \
+**Pad:** Used to communicate with outside world. \
+**Core:** Area where the digital logic sits. \
+**Die:** Size of entire chip. \
+**Foundry:** Fabrication plant for semiconductor chips. \
+**Foundry IP’s:** IP’s supported by foundries. \
 ![ASIC Chip](Images/D1_1.png)
 
 ## Introduction to RISCV ISA
@@ -27,3 +27,15 @@ For running a software/app first the software/app informs the system software wh
 ![Openlane ASIC Flow](Images/D1_3.png)
 
 We can see that it follows typical ASIC design flow. Some of its key features are discussed here. Synthesis exploration is where we try various tried and tested strategies on the design and select the strategy with best performance. After that we do STA on the synthesizes netlist followed by DFT insertion using fault tool. Post that physical implementation is done on OpenROAD.
+
+## Openlane Directory sturcture
+The tools are at directory ~/Desktop/work/tools. Inside it we have two directories ‘pdk’ and ‘Openlane’.
+Pdk directory has 3 directories skywater-pdk: compatible with commercial tools, open-pdk: has scripts to make it compatible with opensource tools and ‘sky130A’ pdk that are compatible with open source EDA tools. Sky130A has 2 directory libs.ref has files specific to the technologies and libs.tech has files specific to the tools. All the libraries can be found at libs.ref.
+
+**Openlane Flow:** Inside Openlane directory parallel to pdk there is a file named flow.tcl.We need to Invoke flow.tcl on docker, which will start the flow and complete the RTL to gdsii flow, using -interactive switch we can interactivly control each step of the flow.
+Commands used:
+```console
+docker
+flow.tcl -interactive
+```
+
