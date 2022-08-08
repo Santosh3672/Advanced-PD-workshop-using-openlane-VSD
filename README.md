@@ -65,7 +65,7 @@ Total cells: 20234
 ## Deciding utilization ratio and aspect ratio:
 If we add the area of all the std cells in the design and make a floor plan with a core size of that number then it will have utilization ratio of 100%. \
 <p align="center">
-<img src="Images/D2_1.png" width="300"> \
+<img src="Images/D2_1.png" width="300">
 </p>
 Utilization factor is defined as: \
 **Utilization factor** = Area occupied by the netlist / total area of core. \
