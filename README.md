@@ -11,4 +11,4 @@
 # Day1: Inception of open-source EDA, OpenLANE and Sky130 PDK
 ## Introduction:
 An ASIC chip is shown below:
-![ASIC Chip](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/Images/D1_1.png)
+![ASIC Chip](Images/D1_1.png)
