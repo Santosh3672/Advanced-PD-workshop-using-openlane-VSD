@@ -236,7 +236,7 @@ On ngspice terminal we can plot IO curves using `plot y vs time a` command:
 	ngspice {spice_file_name}
 	plot y vs time a
 ```
- ![](Images/D3_5.png) \
+ ![](Images/D3_5.png) 
 ## Cell characterization from NGspice waveform:
 *Rise transition:* Time taken by rising signal at 20% = 2.181 ns \
 		Time taken by rising signal at 80% = 2.245 ns \
