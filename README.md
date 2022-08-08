@@ -10,12 +10,12 @@
  
 # Day1: Inception of open-source EDA, OpenLANE and Sky130 PDK
 ## Introduction:
-During ASIC design we will come across some terms more frequenlty few of them are listed below:
-Pad: Used to communicate with outside world.
-Core: Area where the digital logic sits.
-Die: Size of entire chip.
-Foundry: fabrication plant for semiconductor chips.
-Foundry IP’s: IP’s supported by foundries.
+During ASIC design we will come across some terms more frequenlty few of them are listed below: \
+Pad: Used to communicate with outside world. \
+Core: Area where the digital logic sits. \
+Die: Size of entire chip. \
+Foundry: Fabrication plant for semiconductor chips. \
+Foundry IP’s: IP’s supported by foundries. \
 ![ASIC Chip](Images/D1_1.png)
 
 ## Introduction to RISCV ISA
