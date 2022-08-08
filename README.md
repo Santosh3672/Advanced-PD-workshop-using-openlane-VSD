@@ -24,7 +24,7 @@ For running a software/app first the software/app informs the system software wh
 ![How software run](Images/D1_2.png)
 
 ## SoC Design using Openlane:
-![Openlane ASIC Flow](Images/D1_3.png)
+![Openlane ASIC Flow](Images/D1_3.png) \
 
 We can see that it follows typical ASIC design flow. Some of its key features are discussed here. Synthesis exploration is where we try various tried and tested strategies on the design and select the strategy with best performance. After that we do STA on the synthesizes netlist followed by DFT insertion using fault tool. Post that physical implementation is done on OpenROAD.
 
