@@ -52,3 +52,13 @@ prep -design {design_name} -tag {tag_name} -overwrite
 If we want to work on a present tag of the design we can specify that using -tag switch.
 
 We can run synthesis using `run_synthesis` command.
+
+After that we can see that inside design directory for the given design there will be runs directory created with files named as the date and time of the run which contains all the information of the run.
+![Post synthesis](Images/D1_5.png)
+![](Images/D1_6.png)
+![](Images/D1_7.png)
+Specifications of the synthesized design. 
+Area of design: 147712.918400.
+Total cells: 14876.
+Total D-Flipflop(dfxtp): 1613
+Percentage of total D-FF to total cells: 1613/14876*100 = 10.843%
