@@ -51,4 +51,4 @@ prep -design {design_name} -tag {tag_name} -overwrite
 ```
 If we want to work on a present tag of the design we can specify that using -tag switch.
 
-We can run synthesis using =='run_synthesis'== command.
+We can run synthesis using ==run_synthesis== command.
