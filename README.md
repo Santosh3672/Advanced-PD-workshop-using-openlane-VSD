@@ -16,6 +16,10 @@ This repo contains all the learnings and labs on Advanced PD workshop by VSD. It
   - [Cell design flow](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#cell-design-flow)
   - [Timing characterization](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#timing-characterization)
 - [Day3: Design library cell using Magic Layout and ngspice characterization](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#day3-design-library-cell-using-magic-layout-and-ngspice-characterization)
+  - [16 mask CMOS fabrication process](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#16-mask-cmos-fabrication-process)
+  - [SPICE simulation of standard cells](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#spice-simulation-of-standard-cells)
+  - [Inverter design using openlane](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#inverter-design-using-openlane)
+  - [Cell characterization from NGspice waveform](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#cell-characterization-from-ngspice-waveform)
 - [Day4: Pre-layout timing analysis and importance of good clock tree](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#day4-pre-layout-timing-analysis-and-importance-of-good-clock-tree)
 - [Day5: Final steps for RTL2GDS using tritonRoute and openSTA](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#day5-final-steps-for-rtl2gds-using-tritonroute-and-opensta)
  
