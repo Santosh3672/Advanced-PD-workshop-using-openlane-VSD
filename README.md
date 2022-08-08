@@ -88,8 +88,8 @@ We can run synthesis using `run_synthesis` command.
 After that we can see that inside design directory for the given design there will be runs directory created with files named as the date and time of the run which contains all the information of the run.
 \
 ![Post synthesis](Images/D1_5.png)
-![](Images/D1_6.png)
-![](Images/D1_7.png)  \
+![](Images/D1_6.JPG)
+![](Images/D1_7.JPG)  \
 \
 Statistics of the synthesized design: \
 Area of design: 198775.6416 \
