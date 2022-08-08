@@ -11,4 +11,4 @@
 # Day1: Inception of open-source EDA, OpenLANE and Sky130 PDK
 ## Introduction:
 An ASIC chip is shown below:
-<img src="Images/D1_1.png">
+![ASIC Chip](img src="Images/D1_1.png")
