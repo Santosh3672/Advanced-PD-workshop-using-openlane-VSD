@@ -294,7 +294,12 @@ Post that we need to do timing analysis with the real clocks with skews. \
  ![](Images/D4_5.png) \
  Shielding breaks the coupling capacitance between critical and other nets. After shielding the clock nets we can do static timing analysis on the design. \
 The command to run cts in Openlane is `run_cts`: some of its configuration settings are `CTS_TARGET_SKEW`( target skew in ps), `CTS_ROOT_BUFFER`(name of cell inserted in tree), `CLOCK_TREE_SYNTH`(enable cts for triton cts), `CTS_TOLERANCE` (tradeoff between qor and runtime) \
+```console
+	run_stc
+```
 After running cts flow it creates another netlist named as `{design name}.synthesis_cts.v` \
+ ![](Images/D4_6.PNG) \
+ ![](Images/D4_7.PNG) \
 All the command run before like run_synthesis, run_placement, etc are procs of tcl which is similar to functions. They are present in scripts/tcl_commands/ inside the Openlane directrory. \
 Static timing analysis after CTS becomes more practical, now the difference launch and capture clock edge will be different from the time period by the value of clock skew. \
 Now, setup requirement is: 
