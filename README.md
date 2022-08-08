@@ -93,7 +93,7 @@ Post that we need to block the placement of cells outside core area by placement
 Floorplan is run using ‘run_floorplan’ command when run interactively. It will run with default configuration, we can change it in the configuration directory parallel to flow.tcl. The configuration can be changed in config.tcl or in {pdk name}_config.tcl. The priority is as follow: \
 	```console
 	Floorplan.tcl << config.tcl << {pdk name}_config.tcl
-	```
+	``` \
 Floorplan was run with changing IO layer number configuration, after the run the def file was generated.
 
 
