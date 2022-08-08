@@ -65,10 +65,11 @@ Total cells: 20234
 ## Deciding utilization ratio and aspect ratio:
 If we add the area of all the std cells in the design and make a floor plan with a core size of that number then it will have utilization ratio of 100%. \
 ![](Images/D2_1.png | width=300) \
+<img src="Images/D2_1.png" width="48">
 Utilization factor is defined as: \
 **Utilization factor** = Area occupied by the netlist / total area of core. \
 100% utilization is not practical as there is no room left for other cells and routing. \
-**Aspect ratio** = Height/ Width \
+**Aspect ratio** = Height/ Width of the core
 ## Defining location of preplaced cells:
 What are preplaced cells?
 These could be block of digital logic which have can be used multiple times but have more than one logic gates hence we just need to know about its I/O pin usage and use them like a Blackbox provided we know how to use them. Examples of such blocks are IP’s, memories, etc.
