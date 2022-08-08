@@ -325,3 +325,56 @@ In CTS design with real clocks, the equation becomes,
 The jitter is not an uncertainty here as we will be analysis for the same clock edge same uncertainty both sides (for half cycle hold paths we might have to consider them). Due to this the uncertainty of hold analysis is lower compared to setup analysis uncertainty.
 
 # Day5: Final steps for RTL2GDS using tritonRoute and openSTA
+## Routing and DRC:
+During routing stage, the pins of placed are routed using metal layers to complete the signal nets.
+One of the routing algorithms is Lee’s maze routing algorithm. The aim is to do routing with very less zig zag shaped and have as much L shaped routes between 2 pins as possible. The algorithm works as: \
+•	It creates routing grid in the core \
+•	Then it identifies source and target and put them in grids. \
+•	Then it labels the adjacent grid box of source with number 1, then it labels the adjacent grid box of grid 1 as 2 then this process continues. \
+•	The above process should not choose any blockage area. It is continued till we reach the targed grid box. \
+•	Once the target is reached, we know the shortest distance from source to target. \
+•	The path from source can be tracked by moving adjacent numbers in grid box, we can have multiple paths available. \
+ ![](Images/D5_1.png) \
+ Afte routing we need to ensure that the foundry rules are followed these rules are called design rule check DRC, which are a set of rules from foundry that are required to manufacture a chip. Rules like minimum width, minimum area, minimum spacing, etc are included in DRC if these rules are violated the opto-lithography process will fail. The value of the threshold values like minimum via width, wire width, etc comes from experiments performed by foundry. \
+To know the last run done on openlane echo the env variable “CURRENT_DEF”. Our last run was CTS next step is routing. But before that we need to generate power distribution network (PDN) using ‘gen_pdn’ command. But in the new flow the PDN generation occurs in floorplan stage which can be seem in floorplan layout hence it is not needed. In a PDN power flows from power pads to power rings then the power straps that are tapped from power rings provides power to standard cells. \
+ ![](Images/D5_2.png) \
+ Now we can proceed with routing stage using ‘run_routing’ command. The routing configurations has switches like GLB_RT_MAXLAYER, ROUTING_STRATEGY (tradeoff between qor and runtime), GLB_RT_ADJUSTMENT, etc. Routing is run using Tritonroute tool it also runs routing using two steps: \
+•	Global Route: In this method the entire routing region is converted to a 3D graph on which routing paths are found which provides routing guide for the next stage. \
+•	Detailed route: This method ensures that the wires and vias are laid in accordance with the global route results. \
+## Freatures of TritonRoute:
+•	Performs initial routing
+•	Preprocesses route guide: it attempts to follow global route as much as possible, given the guide should have unit width and be in preferred direction.
+ ![](Images/D5_3.png) \
+On the routing guide, the routes on non preffered direction are splited and then merged orthogonal edged routes after that the edges parallel to preferred routing direction are bridged with additional metal layers at last the non preferred directions are converted to another layer (M2 here). \
+•	Inter-guide connectivity: Two guides are connected if they are on same metal layer and touching or if they are on neighbouring metal layer with non zero overlapping area(connected through vias). \
+Each pins of cell should have a pin shaped overlap with a routing guide. \
+•	Intra-layer parallel and Inter-layer sequential panel routing: It means that routing in a layer will occur parallely after that only the routing of the next layer will start. Like M1 routing will occur first followed by M2 routing then M3 and so on. \
+## Working of TritonRoute:
+*Input:* LEF,DEF, Preprocessed route guides. \
+*Output:* Detailed routing solution with optimized wire lengths and via count. \
+*Constratined:* Route guide honouring, connectivity constraints and design rule. \
+*Handling connectivity:* The goal is to find list of access points to compete routing guide. Access point is a box in routing grid that has connection to upper layer, lower layer, pin or IO ports. \
+One of the routing guide is to find minimal spaning tree that follows the routing guide.
+## Routing on openlane:
+In openlane routing stage is started using `run_routing` command.
+```console
+run_routing
+```
+ ![](Images/D5_4.png) \
+ ![](Images/D5_4_3.PNG) \
+ It took 57 iterations with a runtime of 17 minutes and there are no violations post routing. \
+Parasitic extraction is also included in run_routing in new version of openlane we can check it from the proc file of run_routing. \
+ ![](Images/D5_4_1.PNG) \
+ ![](Images/D5_4_2.PNG) \
+The flow also dumps a png file of the def file which can be viewed without any tool. \
+ ![](Images/D5_5.png) \
+ Snippet of picorv32a.def.png after routing
+
+# Reference
+1. VLSI System Design: https://www.vlsisystemdesign.com/
+2. OpenLANE: https://github.com/The-OpenROAD-Project/OpenLane
+3. RISCV: https://riscv.org/
+
+# Acknowledgement
+1. [Kunal Ghose](https://github.com/kunalg123): Co-founder, VSD Corp. Pvt. Ltd.
+2. [Nickson Jose](https://github.com/nickson-jose)
