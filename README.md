@@ -65,7 +65,7 @@ Total cells: 20234
 ## Deciding utilization ratio and aspect ratio:
 If we add the area of all the std cells in the design and make a floor plan with a core size of that number then it will have utilization ratio of 100%. \
 <img src="Images/D2_1.png" width="300"> \
-*Design with 100% utilization*
+*Design with 100% utilization* \
 Utilization factor is defined as: \
 **Utilization factor** = Area occupied by the netlist / total area of core. \
 100% utilization is not practical as there is no room left for other cells and routing. \
@@ -84,7 +84,7 @@ Design with preplaced cells and decap placed around them.
 We can have many macros, memories or std cells in the design and they can have a huge current demand. We can’t have decoupling capacitor on each of the nets because of Voltage droop and Ground bounce.
 Suppose a 16-bit bus is connected to Decap cell then if the logic is inverted then for all the bits transitioning from 0 to 1 will charge the capacitance this will cause droop in power pin and for all bits going from 1 to 0 will discharge capacitance and there will be increase in ground voltage callsed ground bounce.
 If there was power supply in each of the cells, then we wouldn’t require decap cells to overcome voltage drop issue.
-![](Images/D2_4.png =300x300) ![](Images/D2_5.png =300x300)
+<img src="Images/D2_4.png" width="450"> <img src="Images/D2_5.png" width="450">
 ## Pin Placement
 In the design apart from the std cells the input and pins are also required to be placed judiciously since good placement of pins can save us routing resources and net delay. It requires a good collaboration between frontend and backend team. 
 Post that we need to block the placement of cells outside core area by placement blockage.
