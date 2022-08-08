@@ -109,7 +109,7 @@ Command used:
 ```console
 magic -T ~/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef  def read picorv32a.floorplan.def &
 ```
--T option takes techled file, \
+-T option takes techlef file, \
 lef read taked the merged.lef files that was generated while starting Openlane has cell and layer information. \
 Def read takes the current floorplan def file.  \
 ![](Images/D2_9.png) \
@@ -130,7 +130,7 @@ Library Characterization and modelling:
 In synthesis we convert RTL to logic gates then move to floorplan placement all the way to signoff. In all these steps the standard cells are common. The libraries are provided with various models that can be understood by all the tools in PD flow.
 
 ## Congestion aware placement in Openlane using RePlAce:
-Placement occurs in two stage global and detailed placement. The placement algorithm tries to reduce half parameter wire length. Placement is run using ‘run_placement’ command. 
+Placement occurs in two stage global and detailed placement. The placement algorithm tries to reduce half parameter wire length. Placement is run using `run_placement` command. 
 
 Placed design in magic tool. \
 ![](Images/D2_13.png) \
