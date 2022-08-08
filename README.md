@@ -43,16 +43,19 @@ During ASIC design we will come across some terms more frequenlty few of them ar
 **Die:** Size of entire chip. \
 **Foundry:** Fabrication plant for semiconductor chips. \
 **Foundry IP’s:** IP’s supported by foundries. \
+\
 ![ASIC Chip](Images/D1_1.png)
-
+\
 ## Introduction to RISCV ISA
 RISCV ISA: (Reduced Instruction Set computer V) is an open source architecture of processor based on RISC principle also known as instruction set architecture. The hardware runs on low level opcode.
 For running a software/app first the software/app informs the system software which has compiler to convert the high level code to instructions then the instruction of given architecture(intel x86, ARM or MIPS) are converted to opcodes using assembler. \
+\
 ![How software run](Images/D1_2.png)
-
+\
 ## SoC Design using Openlane:
+\
 ![Openlane ASIC Flow](Images/D1_3.png) 
-
+\
 We can see that it follows typical ASIC design flow. Some of its key features are discussed here. Synthesis exploration is where we try various tried and tested strategies on the design and select the strategy with best performance. After that we do STA on the synthesizes netlist followed by DFT insertion using fault tool. Post that physical implementation is done on OpenROAD.
 
 ## Openlane Directory sturcture
@@ -65,7 +68,9 @@ Commands used:
 docker
 flow.tcl -interactive
 ```
+\
 ![Openlane console](Images/D1_4.png)
+\
 After invoking openlane flow we need to do following steps as a prerequisite to start working on the flow.
 •	**Loading the required openlane packages:** 
 ```console 
@@ -81,9 +86,11 @@ If we want to work on a present tag of the design we can specify that using -tag
 We can run synthesis using `run_synthesis` command.
 
 After that we can see that inside design directory for the given design there will be runs directory created with files named as the date and time of the run which contains all the information of the run.
+\
 ![Post synthesis](Images/D1_5.png)
 ![](Images/D1_6.png)
 ![](Images/D1_7.png)  \
+\
 Statistics of the synthesized design: \
 Area of design: 198775.6416 \
 Total cells: 20234 
@@ -91,7 +98,9 @@ Total cells: 20234
 # Day2: Good floorplan vs bad floorplan
 ## Deciding utilization ratio and aspect ratio:
 If we add the area of all the std cells in the design and make a floor plan with a core size of that number then it will have utilization ratio of 100%. \
+\
 <img src="Images/D2_1.png" width="300"> \
+\
 *Design with 100% utilization* \
 Utilization factor is defined as: \
 **Utilization factor** = Area occupied by the netlist / total area of core. \
@@ -103,16 +112,21 @@ These could be block of digital logic which have can be used multiple times but 
 The preplace cells are placed based on design details for example if a memory cell has lot of interaction with input ports on the left side it would be better to place them near that port. Once it is placed, we don’t move them in further steps of the flow.
 Adding Decap cells to the preplaced cells: The physical wires have physical dimension hence they have resistance, capacitance, and inductance as well. Due to which there will be voltage drop. This voltage drop might cause the output voltage of cells to be low enough to be on the undefined logic region which could be disastrous for the design.
 To prevent this phenomena, we add decoupling capacitance: \
+\
 ![](Images/D2_2.png "Decoupling capacitor supplies energy to the cells when supply voltage is low")
+\
 As capacitor is an energy storing device it will deliver voltage to the logic near them when the supply voltage is low prevents any voltage drop across the logic. It decouples the circuit from main supply. \
+\
 ![](Images/D2_3.png "Design with preplaced macros and decap cells around them") \
+\
 Design with preplaced cells and decap placed around them.
 ## Power planning: 
 We can have many macros, memories or std cells in the design and they can have a huge current demand. We can’t have decoupling capacitor on each of the nets because of Voltage droop and Ground bounce.
 Suppose a 16-bit bus is connected to Decap cell then if the logic is inverted then for all the bits transitioning from 0 to 1 will charge the capacitance this will cause droop in power pin and for all bits going from 1 to 0 will discharge capacitance and there will be increase in ground voltage callsed ground bounce.
 If there was power supply in each of the cells, then we wouldn’t require decap cells to overcome voltage drop issue.
-
+\
 <img src="Images/D2_4.png" width="450" height="350"> <img src="Images/D2_5.png" width="450" height="350">
+\
 ## Pin Placement
 In the design apart from the std cells the input and pins are also required to be placed judiciously since good placement of pins can save us routing resources and net delay. It requires a good collaboration between frontend and backend team. 
 Post that we need to block the placement of cells outside core area by placement blockage.
@@ -123,13 +137,18 @@ Floorplan is run using ‘run_floorplan’ command when run interactively. It wi
 	Floorplan.tcl << config.tcl << {pdk name}_config.tcl
 	``` \
 Floorplan was run with changing IO layer number configuration, after the run the def file was generated.
-
+\
 ![](Images/D2_6.png) \
+\
 The DEF files is shown below, it is a large file with around 37k lines. \
+\
 ![](Images/D2_7.png) \
+\
 1 micron = 1000 database unit. So area of die = (660685/1000 um) * (671405/1000 um) = 443587.2124 um sq. \
 Visual representation of FP picorv32a.floorplan.def.png generated by run_floorplan. \
+\
 ![](Images/D2_8.png) \
+\
 ## Viewing def file in magic:
 
 Command used: 
@@ -139,17 +158,22 @@ magic -T ~/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/
 -T option takes techlef file, \
 lef read taked the merged.lef files that was generated while starting Openlane has cell and layer information. \
 Def read takes the current floorplan def file.  \
+\
 ![](Images/D2_9.png) \
 ![](Images/D2_10.png) \
+\
 Design after floorplan
+\
 ![](Images/D2_11.png) \
+\
 Decap cells and Tap cells in the design
 
 ## Binding netlist with physical cells:
 All logic gates are physically shaped as a rectangle be it an AND gate, Mux or D FF. This information is stored in libraries that contain physical information as well as timing, noise and other necessary information required for implementation. It also contains different variations of a single logic gate like different size(drive strength), speed, threshold voltage(vt), etc. 
 After floorplan we need to place the netlist in the core, so we need to bind the netlist with physical cells. Then we can place those physical cells on the core. This placement also needs to be done judiciously based on the design so that cells that are communicating more with a port or block are placed nearby this will save routing resource, avoid congestion and reduce delay to meet timing. \
+\
 ![](Images/D2_12.png) 
-
+\
 On above figure we have design on right and placement of gates on right. For orange and yellow FF, the placement was easy as its input and output ports are on the same row. For blue and yellow FF, it is difficult as their input and output pins are placed diagonally opposite. For green FF it has additional problem due to a preplaced block.
 For long wire between two pins, we can add repeaters(buffer) to maintain signal integrity. For example, here we can add one or two buffer between Din2 and yellow FF1. Post that the timing is checked to see if the placed design can run at the desired frequency. Here we assume clocks to be ideal and check setup timing. 
 Based on the timing results we can either modify the placement or add buffers.
@@ -162,29 +186,38 @@ To view placed design in magic tool use below command:
 ```console
 magic -T ~/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def picorv32a.placement.def
 ```
+\
 ![](Images/D2_14.PNG) 
-
+\
 
 Placed design in magic tool. \
+\
 ![](Images/D2_13_1.PNG) \
 ![](Images/D2_13_2.PNG) \
+\
 We can see endcap cells, tap cells, std cells, and pg grid being made. 
 
 ## Cell design flow:
 
-As discussed earlier we have library of the std cells with different varieties and each have multiple models for different tools. The cell design flow is discussed here. \
+As discussed earlier we have library of the std cells with different varieties and each have multiple models for different tools. The cell design flow is discussed \
+here. \
+\
 ![](Images/D2_15.png) \
+\
 For cell design flow we need inputs those are PDKs, DRC & LVS rules (required by foundry), SPICE models (with all physical parameters), library and user defined specs.
 Dimension of cell: the height of the cell should be same for all cells so that VSS and VDD will be laid. Width of the cell can be varied wider cells for high drive strength cells. \
 Supply voltage: It will be determined by the user (top level designer) and cell designer has to design cells based on that voltage. \
 Metal layers: It could be on M1 or M2 or M3 based on user requirement. \
 Then based on the given input cell designer will start designing cell. Designer does spice simulation to design circuit like makil w/l of pmos double w/l of nmos, selecting w/l ratio for desired Id value. After which CDL(circuit descriptive language) is given as output.  \
 Post that layout design will start. To design layout we first get the CMOS design of the circuit with PMOS and NMOS. Then derive the graphs of PMOS and NMOS network as shown below. \
+\
 ![](Images/D2_16.png) \
+\
 Here we are discussing about Euler’s path + stick diagram method which gives layout with best performance and best area. In this method after we derive network graph we derive Euler’s path which is the path that is traversed once. For above example it is A-C-E-F-D-B. \
 Then we create a stick diagram of the order of Euler’s path and make connection according to the design. Post that we convert it to layout while adhering to the foundry rules and user input rules. \
+\
 ![](Images/D2_17.png) \
-
+\
 With the final layout completed we will produce its GDSII, LED and extract its spice netlist (.cir).
 After layout we need to the do cell characterization. Steps included in this process are:
 1.	Read the model files 
@@ -225,11 +258,15 @@ For SPICE simulation of any cell, first we need to create the spice deck which c
 •	Identify nodes: nodes are points between which we have devices or passive elements. \
 •	Naming of the nodes.  \
 Based on node names and component names and their values we can write the spice model in text which can be understood by the tool. \
+\
 ![](Images/D3_1.png) \
+\
 In above example we can see circuit of inverter with all components values and nodes named. With those names and values the SPICE we defined the circuit textually followed by defining the input and output voltages and simulation environment. It is followed by calling spice library model from foundry that contains all the physical parameters required for simulation. \
 In CMOS the mobility of n carries is more than p type hence we need to have higher Wp/Lp than Wn/Ln so that switching threshold will be half of the Vin. It is required to equalize the rise and fall delay. \
 *Switching threshold (Vm):* It is the point where the DC characteristics of CMOS intersects with Vin = Vout curve. \
+\
 ![](Images/D3_2.png) \
+\
 VSD cell design github repository: https://github.com/nickson-jose/vsdstdcelldesign
 
 ## Inverter design using openlane:
@@ -240,11 +277,14 @@ Then we need to ensure that the cell is functioning as we want we can do it usin
 	ext2spice cthresh 0 rthresh 0
 	ext2spice
 ```
+\
 ![](Images/D3_3.png) \
+\
 Spice file created from magic layout tool for ngspice analysis \
 \
 Here the input voltage and supply voltages are not defined as they were not defined in magic tool. Also the model files of mos are to be defined that came with the github repo. For simulation we also need to define the simulation type in the spice netlist. After which the SPICE file looks like: \
- ![](Images/D3_4.png) \
+\
+![](Images/D3_4.png) \
 \
 Now we are ready to run spice simulation we can invoke ngspice using `ngspice {spice_file_name}`.
 On ngspice terminal we can plot IO curves using `plot y vs time a` command:
@@ -252,7 +292,9 @@ On ngspice terminal we can plot IO curves using `plot y vs time a` command:
 	ngspice {spice_file_name}
 	plot y vs time a
 ```
- ![](Images/D3_5.png) 
+\
+![](Images/D3_5.png) 
+\
 ## Cell characterization from NGspice waveform:
 *Rise transition:* Time taken by rising signal at 20% = 2.181 ns \
 		Time taken by rising signal at 80% = 2.245 ns \
@@ -268,12 +310,16 @@ Similarly, *fall transition* = 4.095 ns - 4.052 ns = 43 ps. \
 In cell design we need to ensure that the pins are located at the intersection of vertical and horizontal routes. In sky130 process the layer connected to cell is of local interconnect we can check it by creating grid with the pitch and offset values from track.tech file and see if the grids are intersecting at pin location. \
 Then we need to define the ports of the cells and their functionality using port command in magic before creating LEF file for PR tool. To create LEF file use command `lef write {optional file_name}`. \
 By using clock-gating cells we can turn off some clocks and save power. The input transition and output load might vary for a cell hence calculating delay of cell needs to be done for each time these values are changed. Doing a complex spice model would be very time consuming hence to solve that we have delay table where input slew and output load values are written in rows and columns and the delay for certain transition and load are filled using spice model.  \
- ![](Images/D4_2.png) \
+\
+![](Images/D4_2.png) \
+\
 For example, if the input slew is 60ps and load is 50fF delay would be x15. For any values not in the table we can find delay using linear interpolation. \
 While creating clock tree we need to ensure that the skew very low for that we need to find delay using above method and take care of the issue at an early stage of CTS. \
 ## Setup timing analysis (with ideal clock):
 Ideal clock means clock tree not built (no skew). So on 0s clock reaches launch flop and at T(time period) it reached capture flop. So the delay of launch flop and combinational logic should be less than time period. But in practical case there should be a finite time require by the D input to be stable before a clock edge called setup time. So equation is Launch flop delay + combinational delay + setup time < time period.
- ![](Images/D4_3.png) 
+\
+![](Images/D4_3.png) 
+\
 ## Clock jitter:
 Clock is produced by PLL or some other source which is real practical source and it might not generate clock at exact times the clock edge time might have some variation than the expected time this is called clock jitter. We need to model the jitter in our equation, in worst case clock period could be less than expected hence setup equation becomes: \
 ```console
@@ -296,15 +342,21 @@ Post that I changed the strategy to Delay 0 which focuses more on reducing delay
 |     After     	|     DELAY 0                 	|     0           	|     0           	|     196832.528     	|
 
 We can see that when tool focuses on delay(with DELAY 0 strategy), area is not priority hence the paths are made timing clean by increasing area. \
- ![](Images/D4_1.png)
+\
+![](Images/D4_1.png)
+\
 ## Clock tree synthesis:
 It is the step where we connect clock port with all the sequential elements of the design. The main objective is to reduce skew of the clocks. For which H-tree is and effective method. In this method we create clock in H shape and iteratively create other branches in H shape. This method ensures that the wire length to all flops is similar. \
 After H-tree is created we need to add repeaters at regular interval so that the shape of the clock signal is not distorted due to the high capacitance of the clock path. \
- ![](Images/D4_4.png) \
+\
+![](Images/D4_4.png) \
+\
 Post that we need to do timing analysis with the real clocks with skews. \
 *Clock net shielding:* Clocks nets are critical nets and we don’t want it to be affected by crosstalk from other nets. To do that we shield the clock net with additional layer. This protects the clock nets from glitch (causing serious problems) and delta delay(increasing skew) effect. \
- ![](Images/D4_5.png) \
- Shielding breaks the coupling capacitance between critical and other nets. After shielding the clock nets we can do static timing analysis on the design. \
+\
+![](Images/D4_5.png) \
+\
+Shielding breaks the coupling capacitance between critical and other nets. After shielding the clock nets we can do static timing analysis on the design. \
 The command to run cts in Openlane is `run_cts`: some of its configuration settings are `CTS_TARGET_SKEW`( target skew in ps), `CTS_ROOT_BUFFER`(name of cell inserted in tree), `CLOCK_TREE_SYNTH`(enable cts for triton cts), `CTS_TOLERANCE` (tradeoff between qor and runtime) 
 ```console
 	run_cts
@@ -344,17 +396,23 @@ One of the routing algorithms is Lee’s maze routing algorithm. The aim is to d
 •	The above process should not choose any blockage area. It is continued till we reach the targed grid box. \
 •	Once the target is reached, we know the shortest distance from source to target. \
 •	The path from source can be tracked by moving adjacent numbers in grid box, we can have multiple paths available. \
- ![](Images/D5_1.png) \
- Afte routing we need to ensure that the foundry rules are followed these rules are called design rule check DRC, which are a set of rules from foundry that are required to manufacture a chip. Rules like minimum width, minimum area, minimum spacing, etc are included in DRC if these rules are violated the opto-lithography process will fail. The value of the threshold values like minimum via width, wire width, etc comes from experiments performed by foundry. \
+\
+![](Images/D5_1.png) \
+\
+After routing we need to ensure that the foundry rules are followed these rules are called design rule check DRC, which are a set of rules from foundry that are required to manufacture a chip. Rules like minimum width, minimum area, minimum spacing, etc are included in DRC if these rules are violated the opto-lithography process will fail. The value of the threshold values like minimum via width, wire width, etc comes from experiments performed by foundry. \
 To know the last run done on openlane echo the env variable “CURRENT_DEF”. Our last run was CTS next step is routing. But before that we need to generate power distribution network (PDN) using ‘gen_pdn’ command. But in the new flow the PDN generation occurs in floorplan stage which can be seem in floorplan layout hence it is not needed. In a PDN power flows from power pads to power rings then the power straps that are tapped from power rings provides power to standard cells. \
- ![](Images/D5_2.png) \
- Now we can proceed with routing stage using ‘run_routing’ command. The routing configurations has switches like GLB_RT_MAXLAYER, ROUTING_STRATEGY (tradeoff between qor and runtime), GLB_RT_ADJUSTMENT, etc. Routing is run using Tritonroute tool it also runs routing using two steps: \
+\
+![](Images/D5_2.png) \
+\
+Now we can proceed with routing stage using ‘run_routing’ command. The routing configurations has switches like GLB_RT_MAXLAYER, ROUTING_STRATEGY (tradeoff between qor and runtime), GLB_RT_ADJUSTMENT, etc. Routing is run using Tritonroute tool it also runs routing using two steps: \
 •	Global Route: In this method the entire routing region is converted to a 3D graph on which routing paths are found which provides routing guide for the next stage. \
 •	Detailed route: This method ensures that the wires and vias are laid in accordance with the global route results. \
 ## Freatures of TritonRoute:
 •	Performs initial routing
 •	Preprocesses route guide: it attempts to follow global route as much as possible, given the guide should have unit width and be in preferred direction.
- ![](Images/D5_3.png) \
+\
+![](Images/D5_3.png) \
+\
 On the routing guide, the routes on non preffered direction are splited and then merged orthogonal edged routes after that the edges parallel to preferred routing direction are bridged with additional metal layers at last the non preferred directions are converted to another layer (M2 here). \
 •	Inter-guide connectivity: Two guides are connected if they are on same metal layer and touching or if they are on neighbouring metal layer with non zero overlapping area(connected through vias). \
 Each pins of cell should have a pin shaped overlap with a routing guide. \
@@ -370,15 +428,21 @@ In openlane routing stage is started using `run_routing` command.
 ```console
 run_routing
 ```
- ![](Images/D5_4.png) \
+\
+![](Images/D5_4.png) \
  ![](Images/D5_4_3.PNG) \
+ \
  It took 57 iterations with a runtime of 17 minutes and there are no violations post routing. \
 Parasitic extraction is also included in run_routing in new version of openlane we can check it from the proc file of run_routing. \
- ![](Images/D5_4_1.PNG) \
+\
+![](Images/D5_4_1.PNG) \
  ![](Images/D5_4_2.PNG) \
+ \
 The flow also dumps a png file of the def file which can be viewed without any tool. \
- ![](Images/D5_5.png) \
- Snippet of picorv32a.def.png after routing
+\
+![](Images/D5_5.png) \
+\
+Snippet of picorv32a.def.png after routing
 
 # Reference
 1. VLSI System Design: https://www.vlsisystemdesign.com/
