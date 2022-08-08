@@ -57,8 +57,6 @@ After that we can see that inside design directory for the given design there wi
 ![Post synthesis](Images/D1_5.png)
 ![](Images/D1_6.png)
 ![](Images/D1_7.png)
-Specifications of the synthesized design. 
-Area of design: 147712.918400.
-Total cells: 14876.
-Total D-Flipflop(dfxtp): 1613
-Percentage of total D-FF to total cells: 1613/14876*100 = 10.843%
+Statistics of the synthesized design. 
+Area of design: 198775.6416.
+Total cells: 20234.
