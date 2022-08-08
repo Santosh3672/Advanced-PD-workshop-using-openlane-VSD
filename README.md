@@ -255,9 +255,8 @@ Similarly, *fall transition* = 4.095 ns - 4.052 ns = 43 ps. \
 ## Timing model using delay table
 In cell design we need to ensure that the pins are located at the intersection of vertical and horizontal routes. In sky130 process the layer connected to cell is of local interconnect we can check it by creating grid with the pitch and offset values from track.tech file and see if the grids are intersecting at pin location. \
 Then we need to define the ports of the cells and their functionality using port command in magic before creating LEF file for PR tool. To create LEF file use command `lef write {optional file_name}`. \
-
 By using clock-gating cells we can turn off some clocks and save power. The input transition and output load might vary for a cell hence calculating delay of cell needs to be done for each time these values are changed. Doing a complex spice model would be very time consuming hence to solve that we have delay table where input slew and output load values are written in rows and columns and the delay for certain transition and load are filled using spice model.  \
- ![](Images/D4_2.png) 
+ ![](Images/D4_2.png) \
 For example, if the input slew is 60ps and load is 50fF delay would be x15. For any values not in the table we can find delay using linear interpolation. \
 While creating clock tree we need to ensure that the skew very low for that we need to find delay using above method and take care of the issue at an early stage of CTS. \
 ## Setup timing analysis (with ideal clock):
@@ -285,15 +284,14 @@ Post that I changed the strategy to Delay 0 which focuses more on reducing delay
 |     After     	|     DELAY 0                 	|     0           	|     0           	|     196832.528     	|
 
 We can see that when tool focuses on delay(with DELAY 0 strategy), area is not priority hence the paths are made timing clean by increasing area. \
- ![](Images/D4_1.png) 
-
+ ![](Images/D4_1.png) \
 ## Clock tree synthesis:
 It is the step where we connect clock port with all the sequential elements of the design. The main objective is to reduce skew of the clocks. For which H-tree is and effective method. In this method we create clock in H shape and iteratively create other branches in H shape. This method ensures that the wire length to all flops is similar. \
 After H-tree is created we need to add repeaters at regular interval so that the shape of the clock signal is not distorted due to the high capacitance of the clock path. \
- ![](Images/D4_4.png) 
+ ![](Images/D4_4.png) \
 Post that we need to do timing analysis with the real clocks with skews. \
 *Clock net shielding:* Clocks nets are critical nets and we don’t want it to be affected by crosstalk from other nets. To do that we shield the clock net with additional layer. This protects the clock nets from glitch (causing serious problems) and delta delay(increasing skew) effect. \
- ![](Images/D4_5.png) 
+ ![](Images/D4_5.png) \
  Shielding breaks the coupling capacitance between critical and other nets. After shielding the clock nets we can do static timing analysis on the design. \
 The command to run cts in Openlane is `run_cts`: some of its configuration settings are `CTS_TARGET_SKEW`( target skew in ps), `CTS_ROOT_BUFFER`(name of cell inserted in tree), `CLOCK_TREE_SYNTH`(enable cts for triton cts), `CTS_TOLERANCE` (tradeoff between qor and runtime) \
 After running cts flow it creates another netlist named as `{design name}.synthesis_cts.v` \
