@@ -3,10 +3,10 @@
 # Table of content
 - [Day 1 Inception of open-source EDA, OpenLANE and Sky130 PDK](#day1-inception-of-open-source-eda-openlane-and-sky130-pdk)
  - [Introduction](#introduction)
- - [Day 2]
- - [Day 3]
- - [Day 4]
- - [Day 5]
+ - [Day2: Good floorplan vs bad floorplan]
+ - [Day3: Design library cell using Magic Layout and ngspice characterization]
+ - [Day4: Pre-layout timing analysis and importance of good clock tree]
+ - [Day5: Final steps for RTL2GDS using tritonRoute and openSTA]
  
 # Day1: Inception of open-source EDA, OpenLANE and Sky130 PDK
 ## Introduction:
@@ -61,4 +61,7 @@ Statistics of the synthesized design.
 Area of design: 198775.6416.
 Total cells: 20234.
 
-#Day2: Good floorplan vs bad floorplan
+# Day2: Good floorplan vs bad floorplan
+# Day3: Design library cell using Magic Layout and ngspice characterization
+# Day4: Pre-layout timing analysis and importance of good clock tree
+# Day5: Final steps for RTL2GDS using tritonRoute and openSTA
