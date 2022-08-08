@@ -289,7 +289,7 @@ On ngspice terminal we can plot IO curves using `plot y vs time a` command:
 ```
 \
 ![](Images/D3_5.png) 
-\
+
 ## Cell characterization from NGspice waveform:
 *Rise transition:* Time taken by rising signal at 20% = 2.181 ns \
 		Time taken by rising signal at 80% = 2.245 ns \
@@ -311,10 +311,10 @@ By using clock-gating cells we can turn off some clocks and save power. The inpu
 For example, if the input slew is 60ps and load is 50fF delay would be x15. For any values not in the table we can find delay using linear interpolation. \
 While creating clock tree we need to ensure that the skew very low for that we need to find delay using above method and take care of the issue at an early stage of CTS. \
 ## Setup timing analysis (with ideal clock):
-Ideal clock means clock tree not built (no skew). So on 0s clock reaches launch flop and at T(time period) it reached capture flop. So the delay of launch flop and combinational logic should be less than time period. But in practical case there should be a finite time require by the D input to be stable before a clock edge called setup time. So equation is Launch flop delay + combinational delay + setup time < time period.
+Ideal clock means clock tree not built (no skew). So on 0s clock reaches launch flop and at T(time period) it reached capture flop. So the delay of launch flop and combinational logic should be less than time period. But in practical case there should be a finite time require by the D input to be stable before a clock edge called setup time. So equation is Launch flop delay + combinational delay + setup time < time period. \
 \
 ![](Images/D4_3.png) 
-\
+
 ## Clock jitter:
 Clock is produced by PLL or some other source which is real practical source and it might not generate clock at exact times the clock edge time might have some variation than the expected time this is called clock jitter. We need to model the jitter in our equation, in worst case clock period could be less than expected hence setup equation becomes: \
 ```console
@@ -339,7 +339,7 @@ Post that I changed the strategy to Delay 0 which focuses more on reducing delay
 We can see that when tool focuses on delay(with DELAY 0 strategy), area is not priority hence the paths are made timing clean by increasing area. \
 \
 ![](Images/D4_1.png)
-\
+
 ## Clock tree synthesis:
 It is the step where we connect clock port with all the sequential elements of the design. The main objective is to reduce skew of the clocks. For which H-tree is and effective method. In this method we create clock in H shape and iteratively create other branches in H shape. This method ensures that the wire length to all flops is similar. \
 After H-tree is created we need to add repeaters at regular interval so that the shape of the clock signal is not distorted due to the high capacitance of the clock path. \
@@ -403,20 +403,20 @@ Now we can proceed with routing stage using ‘run_routing’ command. The routi
 •	Global Route: In this method the entire routing region is converted to a 3D graph on which routing paths are found which provides routing guide for the next stage. \
 •	Detailed route: This method ensures that the wires and vias are laid in accordance with the global route results. \
 ## Freatures of TritonRoute:
-•	Performs initial routing
-•	Preprocesses route guide: it attempts to follow global route as much as possible, given the guide should have unit width and be in preferred direction.
+•	Performs initial routing \
+•	Preprocesses route guide: it attempts to follow global route as much as possible, given the guide should have unit width and be in preferred direction. \
 \
 ![](Images/D5_3.png) \
 \
 On the routing guide, the routes on non preffered direction are splited and then merged orthogonal edged routes after that the edges parallel to preferred routing direction are bridged with additional metal layers at last the non preferred directions are converted to another layer (M2 here). \
-•	Inter-guide connectivity: Two guides are connected if they are on same metal layer and touching or if they are on neighbouring metal layer with non zero overlapping area(connected through vias). \
+•	**Inter-guide connectivity:** Two guides are connected if they are on same metal layer and touching or if they are on neighbouring metal layer with non zero overlapping area(connected through vias). \
 Each pins of cell should have a pin shaped overlap with a routing guide. \
-•	Intra-layer parallel and Inter-layer sequential panel routing: It means that routing in a layer will occur parallely after that only the routing of the next layer will start. Like M1 routing will occur first followed by M2 routing then M3 and so on. \
+•	**Intra-layer parallel and Inter-layer sequential panel routing:** It means that routing in a layer will occur parallely after that only the routing of the next layer will start. Like M1 routing will occur first followed by M2 routing then M3 and so on. 
 ## Working of TritonRoute:
-*Input:* LEF,DEF, Preprocessed route guides. \
-*Output:* Detailed routing solution with optimized wire lengths and via count. \
-*Constratined:* Route guide honouring, connectivity constraints and design rule. \
-*Handling connectivity:* The goal is to find list of access points to compete routing guide. Access point is a box in routing grid that has connection to upper layer, lower layer, pin or IO ports. \
+**Input:** LEF,DEF, Preprocessed route guides. \
+**Output:** Detailed routing solution with optimized wire lengths and via count. \
+**Constratined:** Route guide honouring, connectivity constraints and design rule. \
+**Handling connectivity:** The goal is to find list of access points to compete routing guide. Access point is a box in routing grid that has connection to upper layer, lower layer, pin or IO ports. \
 One of the routing guide is to find minimal spaning tree that follows the routing guide.
 ## Routing on openlane:
 In openlane routing stage is started using `run_routing` command.
