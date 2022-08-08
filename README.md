@@ -157,12 +157,12 @@ magic -T ~/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/
 -T option takes techlef file, \
 lef read taked the merged.lef files that was generated while starting Openlane has cell and layer information. \
 Def read takes the current floorplan def file.  \
-![AB](Images/D2_9.png) \
-![BA](Images/D2_10.png) \
+![AB](Images/D2_9.JPG) \
+![BA](Images/D2_10.JPG) \
 \
 Design after floorplan
 \
-![](Images/D2_11.png) \
+![](Images/D2_11.JPG) \
 \
 Decap cells and Tap cells in the design
 
