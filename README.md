@@ -47,7 +47,7 @@ During ASIC design we will come across some terms more frequenlty few of them ar
 ![ASIC Chip](Images/D1_1.png)
 
 ## Introduction to RISCV ISA
-RISCV ISA: (Reduced Instruction Set computer V) is an open source architecture of processor based on RISC principle also known as instruction set architecture. The hardware runs on low level opcode.
+**RISCV ISA:** (Reduced Instruction Set computer V) is an open source architecture of processor based on RISC principle also known as instruction set architecture. The hardware runs on low level opcode. \
 For running a software/app first the software/app informs the system software which has compiler to convert the high level code to instructions then the instruction of given architecture(intel x86, ARM or MIPS) are converted to opcodes using assembler. \
 \
 ![How software run](Images/D1_2.png)
@@ -59,10 +59,10 @@ For running a software/app first the software/app informs the system software wh
 We can see that it follows typical ASIC design flow. Some of its key features are discussed here. Synthesis exploration is where we try various tried and tested strategies on the design and select the strategy with best performance. After that we do STA on the synthesizes netlist followed by DFT insertion using fault tool. Post that physical implementation is done on OpenROAD.
 
 ## Openlane Directory sturcture
-The tools are at directory ~/Desktop/work/tools. Inside it we have two directories ‘pdk’ and ‘Openlane’.
+The tools are at directory ~/Desktop/work/tools. Inside it we have two directories ‘pdk’ and ‘Openlane’. \
 Pdk directory has 3 directories skywater-pdk: compatible with commercial tools, open-pdk: has scripts to make it compatible with opensource tools and ‘sky130A’ pdk that are compatible with open source EDA tools. Sky130A has 2 directory libs.ref has files specific to the technologies and libs.tech has files specific to the tools. All the libraries can be found at libs.ref.
 
-**Openlane Flow:** Inside Openlane directory parallel to pdk there is a file named flow.tcl.We need to Invoke flow.tcl on docker, which will start the flow and complete the RTL to gdsii flow, using -interactive switch we can interactively control each step of the flow.
+**Openlane Flow:** Inside Openlane directory parallel to pdk there is a file named flow.tcl.We need to Invoke flow.tcl on docker, which will start the flow and complete the RTL to gdsii flow, using -interactive switch we can interactively control each step of the flow. \
 Commands used:
 ```console
 docker
@@ -71,7 +71,7 @@ flow.tcl -interactive
 \
 ![Openlane console](Images/D1_4.png) \
 \
-After invoking openlane flow we need to do following steps as a prerequisite to start working on the flow.
+After invoking openlane flow we need to do following steps as a prerequisite to start working on the flow. \
 •	**Loading the required openlane packages:** 
 ```console 
 package require Openlane 0.9
@@ -81,9 +81,9 @@ package require Openlane 0.9
 ```console 
 prep -design {design_name} -tag {tag_name} -overwrite
 ```
-If we want to work on a present tag of the design we can specify that using -tag switch.
+If we want to work on a present tag of the design we can specify that using -tag switch. \
 
-We can run synthesis using `run_synthesis` command.
+We can run synthesis using `run_synthesis` command. \
 
 After that we can see that inside design directory for the given design there will be runs directory created with files named as the date and time of the run which contains all the information of the run. \
 \
@@ -107,10 +107,10 @@ Utilization factor is defined as: \
 100% utilization is not practical as there is no room left for other cells and routing. \
 **Aspect ratio** = Height/ Width of the core
 ## Defining location of preplaced cells:
-What are preplaced cells?
-These could be block of digital logic which have can be used multiple times but have more than one logic gates hence we just need to know about its I/O pin usage and use them like a Blackbox provided we know how to use them. Examples of such blocks are IP’s, memories, etc.
-The preplace cells are placed based on design details for example if a memory cell has lot of interaction with input ports on the left side it would be better to place them near that port. Once it is placed, we don’t move them in further steps of the flow.
-Adding Decap cells to the preplaced cells: The physical wires have physical dimension hence they have resistance, capacitance, and inductance as well. Due to which there will be voltage drop. This voltage drop might cause the output voltage of cells to be low enough to be on the undefined logic region which could be disastrous for the design.
+What are preplaced cells? \
+These could be block of digital logic which have can be used multiple times but have more than one logic gates hence we just need to know about its I/O pin usage and use them like a Blackbox provided we know how to use them. Examples of such blocks are IP’s, memories, etc. \
+The preplace cells are placed based on design details for example if a memory cell has lot of interaction with input ports on the left side it would be better to place them near that port. Once it is placed, we don’t move them in further steps of the flow. \
+Adding Decap cells to the preplaced cells: The physical wires have physical dimension hence they have resistance, capacitance, and inductance as well. Due to which there will be voltage drop. This voltage drop might cause the output voltage of cells to be low enough to be on the undefined logic region which could be disastrous for the design. \
 To prevent this phenomena, we add decoupling capacitance: \
 \
 ![](Images/D2_2.png "Decoupling capacitor supplies energy to the cells when supply voltage is low") \
@@ -121,15 +121,15 @@ As capacitor is an energy storing device it will deliver voltage to the logic ne
 \
 Design with preplaced cells and decap placed around them.
 ## Power planning: 
-We can have many macros, memories or std cells in the design and they can have a huge current demand. We can’t have decoupling capacitor on each of the nets because of Voltage droop and Ground bounce.
-Suppose a 16-bit bus is connected to Decap cell then if the logic is inverted then for all the bits transitioning from 0 to 1 will charge the capacitance this will cause droop in power pin and for all bits going from 1 to 0 will discharge capacitance and there will be increase in ground voltage callsed ground bounce.
-If there was power supply in each of the cells, then we wouldn’t require decap cells to overcome voltage drop issue.
+We can have many macros, memories or std cells in the design and they can have a huge current demand. We can’t have decoupling capacitor on each of the nets because of Voltage droop and Ground bounce. \
+Suppose a 16-bit bus is connected to Decap cell then if the logic is inverted then for all the bits transitioning from 0 to 1 will charge the capacitance this will cause droop in power pin and for all bits going from 1 to 0 will discharge capacitance and there will be increase in ground voltage callsed ground bounce. \
+If there was power supply in each of the cells, then we wouldn’t require decap cells to overcome voltage drop issue. \
 \
 <img src="Images/D2_4.png" width="450" height="350"> <img src="Images/D2_5.png" width="450" height="350"> \
 
 ## Pin Placement
-In the design apart from the std cells the input and pins are also required to be placed judiciously since good placement of pins can save us routing resources and net delay. It requires a good collaboration between frontend and backend team. 
-Post that we need to block the placement of cells outside core area by placement blockage.
+In the design apart from the std cells the input and pins are also required to be placed judiciously since good placement of pins can save us routing resources and net delay. It requires a good collaboration between frontend and backend team. \
+Post that we need to block the placement of cells outside core area by placement blockage. \
 
 ## Floorplan using Openlane:
 Floorplan is run using ‘run_floorplan’ command when run interactively. It will run with default configuration, we can change it in the configuration directory parallel to flow.tcl. The configuration can be changed in config.tcl or in {pdk name}_config.tcl. The priority is as follow: \
@@ -165,19 +165,19 @@ Design after floorplan
 We can see Decap cells and Tap cells in the design
 
 ## Binding netlist with physical cells:
-All logic gates are physically shaped as a rectangle be it an AND gate, Mux or D FF. This information is stored in libraries that contain physical information as well as timing, noise and other necessary information required for implementation. It also contains different variations of a single logic gate like different size(drive strength), speed, threshold voltage(vt), etc. 
+All logic gates are physically shaped as a rectangle be it an AND gate, Mux or D FF. This information is stored in libraries that contain physical information as well as timing, noise and other necessary information required for implementation. It also contains different variations of a single logic gate like different size(drive strength), speed, threshold voltage(vt), etc. \
 After floorplan we need to place the netlist in the core, so we need to bind the netlist with physical cells. Then we can place those physical cells on the core. This placement also needs to be done judiciously based on the design so that cells that are communicating more with a port or block are placed nearby this will save routing resource, avoid congestion and reduce delay to meet timing. \
 \
 ![](Images/D2_12.png) \
 \
-On above figure we have design on right and placement of gates on right. For orange and yellow FF, the placement was easy as its input and output ports are on the same row. For blue and yellow FF, it is difficult as their input and output pins are placed diagonally opposite. For green FF it has additional problem due to a preplaced block.
-For long wire between two pins, we can add repeaters(buffer) to maintain signal integrity. For example, here we can add one or two buffer between Din2 and yellow FF1. Post that the timing is checked to see if the placed design can run at the desired frequency. Here we assume clocks to be ideal and check setup timing. 
-Based on the timing results we can either modify the placement or add buffers.
-Library Characterization and modelling:
+On above figure we have design on right and placement of gates on right. For orange and yellow FF, the placement was easy as its input and output ports are on the same row. For blue and yellow FF, it is difficult as their input and output pins are placed diagonally opposite. For green FF it has additional problem due to a preplaced block. \
+For long wire between two pins, we can add repeaters(buffer) to maintain signal integrity. For example, here we can add one or two buffer between Din2 and yellow FF1. Post that the timing is checked to see if the placed design can run at the desired frequency. Here we assume clocks to be ideal and check setup timing. \
+Based on the timing results we can either modify the placement or add buffers. \
+Library Characterization and modelling: \
 In synthesis we convert RTL to logic gates then move to floorplan placement all the way to signoff. In all these steps the standard cells are common. The libraries are provided with various models that can be understood by all the tools in PD flow.
 
 ## Congestion aware placement in Openlane using RePlAce:
-Placement occurs in two stage global and detailed placement. The placement algorithm tries to reduce half parameter wire length. Placement is run using `run_placement` command. 
+Placement occurs in two stage global and detailed placement. The placement algorithm tries to reduce half parameter wire length. Placement is run using `run_placement` command. \
 To view placed design in magic tool use below command:
 ```console
 magic -T ~/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def picorv32a.placement.def
@@ -213,7 +213,7 @@ Then we create a stick diagram of the order of Euler’s path and make connectio
 \
 ![](Images/D2_17.png) \
 \
-With the final layout completed we will produce its GDSII, LED and extract its spice netlist (.cir).
+With the final layout completed we will produce its GDSII, LED and extract its spice netlist (.cir). \
 After layout we need to the do cell characterization. Steps included in this process are:
 1.	Read the model files 
 2.	Read the extracted spice netlist
@@ -281,7 +281,7 @@ Here the input voltage and supply voltages are not defined as they were not defi
 \
 ![](Images/D3_4.png) \
 \
-Now we are ready to run spice simulation we can invoke ngspice using `ngspice {spice_file_name}`.
+Now we are ready to run spice simulation we can invoke ngspice using `ngspice {spice_file_name}`. \
 On ngspice terminal we can plot IO curves using `plot y vs time a` command:
 ```console
 	ngspice {spice_file_name}
@@ -362,7 +362,7 @@ After running cts flow it creates another netlist named as `{design name}.synthe
  \
  ![](Images/D4_7.PNG) \
  \
-All the command run before like run_synthesis, run_placement, etc are procs of tcl which is similar to functions. They are present in scripts/tcl_commands/ inside the Openlane directrory. \
+All the command run before like run_synthesis, run_placement, etc are procs of tcl which is similar to functions. They are present in `scripts/tcl_commands/` inside the Openlane directrory. \
 \
  ![](Images/D4_8.PNG) 
 ## Timing analysis after CTS with real Clocks
@@ -383,7 +383,7 @@ The jitter is not an uncertainty here as we will be analysis for the same clock 
 
 # Day5: Final steps for RTL2GDS using tritonRoute and openSTA
 ## Routing and DRC:
-During routing stage, the pins of placed are routed using metal layers to complete the signal nets.
+During routing stage, the pins of placed are routed using metal layers to complete the signal nets. \
 One of the routing algorithms is Lee’s maze routing algorithm. The aim is to do routing with very less zig zag shaped and have as much L shaped routes between 2 pins as possible. The algorithm works as: \
 •	It creates routing grid in the core \
 •	Then it identifies source and target and put them in grids. \
@@ -401,7 +401,7 @@ To know the last run done on openlane echo the env variable “CURRENT_DEF”. O
 \
 Now we can proceed with routing stage using ‘run_routing’ command. The routing configurations has switches like GLB_RT_MAXLAYER, ROUTING_STRATEGY (tradeoff between qor and runtime), GLB_RT_ADJUSTMENT, etc. Routing is run using Tritonroute tool it also runs routing using two steps: \
 •	Global Route: In this method the entire routing region is converted to a 3D graph on which routing paths are found which provides routing guide for the next stage. \
-•	Detailed route: This method ensures that the wires and vias are laid in accordance with the global route results. \
+•	Detailed route: This method ensures that the wires and vias are laid in accordance with the global route results. 
 ## Freatures of TritonRoute:
 •	Performs initial routing \
 •	Preprocesses route guide: it attempts to follow global route as much as possible, given the guide should have unit width and be in preferred direction. \
