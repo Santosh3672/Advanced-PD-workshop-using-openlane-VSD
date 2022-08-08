@@ -85,7 +85,7 @@ We can have many macros, memories or std cells in the design and they can have a
 Suppose a 16-bit bus is connected to Decap cell then if the logic is inverted then for all the bits transitioning from 0 to 1 will charge the capacitance this will cause droop in power pin and for all bits going from 1 to 0 will discharge capacitance and there will be increase in ground voltage callsed ground bounce.
 If there was power supply in each of the cells, then we wouldn’t require decap cells to overcome voltage drop issue.
 
-<img src="Images/D2_4.png" width="450"> <img src="Images/D2_5.png" width="450">
+<img src="Images/D2_4.png" width="450" height="350"> <img src="Images/D2_5.png" width="450" height="350">
 ## Pin Placement
 In the design apart from the std cells the input and pins are also required to be placed judiciously since good placement of pins can save us routing resources and net delay. It requires a good collaboration between frontend and backend team. 
 Post that we need to block the placement of cells outside core area by placement blockage.
