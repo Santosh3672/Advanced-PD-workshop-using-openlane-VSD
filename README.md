@@ -23,10 +23,10 @@ This repo contains all the learnings and labs on Advanced PD workshop by VSD. It
 - [Day4: Pre-layout timing analysis and importance of good clock tree](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#day4-pre-layout-timing-analysis-and-importance-of-good-clock-tree)
   - [Timing model using delay table](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#timing-model-using-delay-table)
   - [Setup timing analysis (with ideal clock)](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#setup-timing-analysis-with-ideal-clock)
-  - [Clock jitter] (https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#clock-jitter)
+  - [Clock jitter](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#clock-jitter)
   - [Using the created standard cell in Picorv32a design](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#using-the-created-standard-cell-in-picorv32a-design)
-  - [Clock Tree Synthesis] (https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#clock-tree-synthesis)
-  - [Timing analysis after CTS with real Clocks]()
+  - [Clock Tree Synthesis](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#clock-tree-synthesis)
+  - [Timing analysis after CTS with real Clocks](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#timing-analysis-after-cts-with-real-clocks)
 - [Day5: Final steps for RTL2GDS using tritonRoute and openSTA](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#day5-final-steps-for-rtl2gds-using-tritonroute-and-opensta)
  
 # Day1: Inception of open-source EDA, OpenLANE and Sky130 PDK
