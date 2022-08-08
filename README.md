@@ -131,10 +131,16 @@ In synthesis we convert RTL to logic gates then move to floorplan placement all 
 
 ## Congestion aware placement in Openlane using RePlAce:
 Placement occurs in two stage global and detailed placement. The placement algorithm tries to reduce half parameter wire length. Placement is run using `run_placement` command. 
-
+To view placed design in magic tool use below command:
+```console
+magic -T ~/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/sky130A.tech lef read ../../tmp/merged.lef def picorv32a.placement.def
+```
+![](Images/D2_14.png) \
 Placed design in magic tool. \
-![](Images/D2_13.png) \
+![](Images/D2_13_1.png) \
 We can see endcap cells, tap cells, std cells, and pg grid being made. 
+
+## Cell design flow:
 
 
 # Day3: Design library cell using Magic Layout and ngspice characterization
