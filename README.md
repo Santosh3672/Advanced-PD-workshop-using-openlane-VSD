@@ -63,9 +63,8 @@ Total cells: 20234.
 
 # Day2: Good floorplan vs bad floorplan
 ## Deciding utilization ratio and aspect ratio:
-If we add the area of all the std cells in the design and make a floor plan with a core size of that number then it will have utilization ratio of 100%. \
-
-![](Images/D2_1.png)
+If we add the area of all the std cells in the design and make a floor plan with a core size of that number then it will have utilization ratio of 100%. 
+![](Images/D2_1.png) 
 Utilization factor is defined as:
 **Utilization factor** = Area occupied by the netlist / total area of core.
 100% utilization is not practical as there is no room left for other cells and routing.
@@ -92,7 +91,9 @@ Post that we need to block the placement of cells outside core area by placement
 
 ## Floorplan using Openlane:
 Floorplan is run using ‘run_floorplan’ command when run interactively. It will run with default configuration, we can change it in the configuration directory parallel to flow.tcl. The configuration can be changed in config.tcl or in {pdk name}_config.tcl. The priority is as follow:
+	```console
 	Floorplan.tcl << config.tcl << {pdk name}_config.tcl
+	```
 Floorplan was run with changing IO layer number configuration, after the run the def file was generated.
 
 
