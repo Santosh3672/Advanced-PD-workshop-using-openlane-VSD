@@ -57,9 +57,9 @@ After that we can see that inside design directory for the given design there wi
 ![Post synthesis](Images/D1_5.png)
 ![](Images/D1_6.png)
 ![](Images/D1_7.png)  \
-Statistics of the synthesized design. 
-Area of design: 198775.6416.
-Total cells: 20234.
+Statistics of the synthesized design: \
+Area of design: 198775.6416 \
+Total cells: 20234 
 
 # Day2: Good floorplan vs bad floorplan
 ## Deciding utilization ratio and aspect ratio:
