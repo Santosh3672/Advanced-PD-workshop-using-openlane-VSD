@@ -63,28 +63,27 @@ Total cells: 20234.
 
 # Day2: Good floorplan vs bad floorplan
 ## Deciding utilization ratio and aspect ratio:
-If we add the area of all the std cells in the design and make a floor plan with a core size of that number then it will have utilization ratio of 100%. 
-![](Images/D2_1.png) 
-Utilization factor is defined as:
-**Utilization factor** = Area occupied by the netlist / total area of core.
-100% utilization is not practical as there is no room left for other cells and routing.
-**Aspect ratio** = Height/ Width
+If we add the area of all the std cells in the design and make a floor plan with a core size of that number then it will have utilization ratio of 100%. \
+![](Images/D2_1.png "Design with 100% utilizaion") 
+Utilization factor is defined as: \
+**Utilization factor** = Area occupied by the netlist / total area of core. \
+100% utilization is not practical as there is no room left for other cells and routing. \
+**Aspect ratio** = Height/ Width \
 ## Defining location of preplaced cells:
 What are preplaced cells?
 These could be block of digital logic which have can be used multiple times but have more than one logic gates hence we just need to know about its I/O pin usage and use them like a Blackbox provided we know how to use them. Examples of such blocks are IP’s, memories, etc.
 The preplace cells are placed based on design details for example if a memory cell has lot of interaction with input ports on the left side it would be better to place them near that port. Once it is placed, we don’t move them in further steps of the flow.
 Adding Decap cells to the preplaced cells: The physical wires have physical dimension hence they have resistance, capacitance, and inductance as well. Due to which there will be voltage drop. This voltage drop might cause the output voltage of cells to be low enough to be on the undefined logic region which could be disastrous for the design.
 To prevent this phenomena, we add decoupling capacitance: \
-
-![](Images/D2_2.png)
+![](Images/D2_2.png "Decoupling capacitor supplies energy to the cells when supply voltage is low")
 As capacitor is an energy storing device it will deliver voltage to the logic near them when the supply voltage is low prevents any voltage drop across the logic. It decouples the circuit from main supply. \
-![](Images/D2_3.png)
+![](Images/D2_3.png "Design with preplaced macros and decap cells around them")
 Design with preplaced cells and decap placed around them.
 ## Power planning: 
 We can have many macros, memories or std cells in the design and they can have a huge current demand. We can’t have decoupling capacitor on each of the nets because of Voltage droop and Ground bounce.
 Suppose a 16-bit bus is connected to Decap cell then if the logic is inverted then for all the bits transitioning from 0 to 1 will charge the capacitance this will cause droop in power pin and for all bits going from 1 to 0 will discharge capacitance and there will be increase in ground voltage callsed ground bounce.
 If there was power supply in each of the cells, then we wouldn’t require decap cells to overcome voltage drop issue.
-![](Images/D2_4.png) ![](Images/D2_5.png)
+![](Images/D2_4.png =300x300) ![](Images/D2_5.png =300x300)
 ## Pin Placement
 In the design apart from the std cells the input and pins are also required to be placed judiciously since good placement of pins can save us routing resources and net delay. It requires a good collaboration between frontend and backend team. 
 Post that we need to block the placement of cells outside core area by placement blockage.
