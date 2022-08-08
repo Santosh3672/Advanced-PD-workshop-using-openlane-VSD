@@ -248,8 +248,69 @@ Rise transition = (2.245-2.181) ns. = 64 ps. \
 Similarly, *fall transition* = 4.095 ns - 4.052 ns = 43 ps. \
 \
 *Propagation delay fall* = 4.077ns – 4.05ns = 27ps \
-*Rise delay* = 2.21ns – 2.15ns = 60ps \
+*Rise delay* = 2.21ns – 2.15ns = 60ps 
 
 
 # Day4: Pre-layout timing analysis and importance of good clock tree
+## Timing model using delay table
+In cell design we need to ensure that the pins are located at the intersection of vertical and horizontal routes. In sky130 process the layer connected to cell is of local interconnect we can check it by creating grid with the pitch and offset values from track.tech file and see if the grids are intersecting at pin location. \
+Then we need to define the ports of the cells and their functionality using port command in magic before creating LEF file for PR tool. To create LEF file use command `lef write {optional file_name}`. \
+
+By using clock-gating cells we can turn off some clocks and save power. The input transition and output load might vary for a cell hence calculating delay of cell needs to be done for each time these values are changed. Doing a complex spice model would be very time consuming hence to solve that we have delay table where input slew and output load values are written in rows and columns and the delay for certain transition and load are filled using spice model.  \
+ ![](Images/D4_2.png) 
+For example, if the input slew is 60ps and load is 50fF delay would be x15. For any values not in the table we can find delay using linear interpolation. \
+While creating clock tree we need to ensure that the skew very low for that we need to find delay using above method and take care of the issue at an early stage of CTS. \
+## Setup timing analysis (with ideal clock):
+Ideal clock means clock tree not built (no skew). So on 0s clock reaches launch flop and at T(time period) it reached capture flop. So the delay of launch flop and combinational logic should be less than time period. But in practical case there should be a finite time require by the D input to be stable before a clock edge called setup time. So equation is Launch flop delay + combinational delay + setup time < time period.
+ ![](Images/D4_3.png) \
+## Clock jitter:
+Clock is produced by PLL or some other source which is real practical source and it might not generate clock at exact times the clock edge time might have some variation than the expected time this is called clock jitter. We need to model the jitter in our equation, in worst case clock period could be less than expected hence setup equation becomes: \
+```console
+θ< T – S – SU
+```
+Where: θ = Launch flop delay + combinational path delay \
+	T = Time period, S = setup time, SU = Setup uncertainty (clock jitter) \
+We can do STA in Openlane flow using opensta tool, there we can analyse the reason of failure of timing paths. Some of the techniques to reduce timing violation are: \
+•	Reduce high fanout nets since they have high output capacitance causing high delay. \
+•	In case of chains of buffer after buffer try to fix first buffer as its high delay will add to slew of next buffer, upsize the first buffer. \
+
+## Using the created standard cell in Picorv32a design:
+We need to add LEF files in src folder of design. Then this file needs to be added in the library. Apart from the LEF file we also need to define other information about our cell as we can see in the library. Also, we need to define them for slow, typical and fast corner. It came with the GitHub link of vsddesing for cell design so we will copy them to the src folder. \
+Adding the library files will not automatically tell Openlane flow to include them during synthesis we need to add their path in config.tcl as well. \
+Command ‘prep -design picorv32a -tag 03-08_16-04 -overwrite’ to run Openlane of a previous run and overwrite it. After adding the designed cell to the library, we ran synthesis again and saw huge violations in timing. The synthesis strategy was set to AREA 0. Then we changed the strategy to different AREA numbers possible like AREA 1 and AREA 2 the violations were same. \
+Post that I changed the strategy to Delay 0 which focuses more on reducing delay of paths. After that all the violations were gone. The summary of design in both situations are tabulated below: \
+|               	|     Synthesis   Strategy    	|     WNS (ns)    	|     TNS (ns)    	|     Area (um^2)    	|
+|---------------	|-----------------------------	|-----------------	|-----------------	|--------------------	|
+|     Before    	|     AREA 0                  	|     -23.89      	|     711.59      	|     147712.9184    	|
+|     After     	|     DELAY 0                 	|     0           	|     0           	|     196832.528     	|
+
+We can see that when tool focuses on delay(with DELAY 0 strategy), area is not priority hence the paths are made timing clean by increasing area. \
+ ![](Images/D4_1.png) 
+
+## Clock tree synthesis:
+It is the step where we connect clock port with all the sequential elements of the design. The main objective is to reduce skew of the clocks. For which H-tree is and effective method. In this method we create clock in H shape and iteratively create other branches in H shape. This method ensures that the wire length to all flops is similar. \
+After H-tree is created we need to add repeaters at regular interval so that the shape of the clock signal is not distorted due to the high capacitance of the clock path. \
+ ![](Images/D4_4.png) 
+Post that we need to do timing analysis with the real clocks with skews. \
+*Clock net shielding:* Clocks nets are critical nets and we don’t want it to be affected by crosstalk from other nets. To do that we shield the clock net with additional layer. This protects the clock nets from glitch (causing serious problems) and delta delay(increasing skew) effect. \
+ ![](Images/D4_5.png) 
+ Shielding breaks the coupling capacitance between critical and other nets. After shielding the clock nets we can do static timing analysis on the design. \
+The command to run cts in Openlane is `run_cts`: some of its configuration settings are `CTS_TARGET_SKEW`( target skew in ps), `CTS_ROOT_BUFFER`(name of cell inserted in tree), `CLOCK_TREE_SYNTH`(enable cts for triton cts), `CTS_TOLERANCE` (tradeoff between qor and runtime) \
+After running cts flow it creates another netlist named as `{design name}.synthesis_cts.v` \
+All the command run before like run_synthesis, run_placement, etc are procs of tcl which is similar to functions. They are present in scripts/tcl_commands/ inside the Openlane directrory. \
+Static timing analysis after CTS becomes more practical, now the difference launch and capture clock edge will be different from the time period by the value of clock skew. \
+Now, setup requirement is: 
+```console
+(θ + D1) < (T + D2) – S – SU
+```
+Where, D1 and D2 are launch and capture clock arrival time respectively. 
+LHS of above equation is data arrival time and RHS is data required time. Data required time subtracted by data arrival time is called slack which should be positive for above equation to hold.
+With real clock we must also check hold violations. Hold time is the minimum time required for the input of a flop to be stable after a clock edge has been passed so we analyse for same clock edges of launch and capture flop. In ideal case the equation becomes:
+`Θ > H`, where H is the hold time of the flop. 
+In CTS design with real clocks, the equation becomes,
+```console
+Θ + D1 > H + D2
+```
+The jitter is not an uncertainty here as we will be analysis for the same clock edge same uncertainty both sides (for half cycle hold paths we might have to consider them). Due to this the uncertainty of hold analysis is lower compared to setup analysis uncertainty.
+
 # Day5: Final steps for RTL2GDS using tritonRoute and openSTA
