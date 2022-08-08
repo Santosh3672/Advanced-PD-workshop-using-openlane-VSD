@@ -187,7 +187,6 @@ magic -T ~/Desktop/work/tools/openlane_working_dir/pdks/sky130A/libs.tech/magic/
 ```
 \
 ![](Images/D2_14.PNG) 
-\
 
 Placed design in magic tool. \
 \
