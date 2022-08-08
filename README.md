@@ -32,10 +32,23 @@ We can see that it follows typical ASIC design flow. Some of its key features ar
 The tools are at directory ~/Desktop/work/tools. Inside it we have two directories ‘pdk’ and ‘Openlane’.
 Pdk directory has 3 directories skywater-pdk: compatible with commercial tools, open-pdk: has scripts to make it compatible with opensource tools and ‘sky130A’ pdk that are compatible with open source EDA tools. Sky130A has 2 directory libs.ref has files specific to the technologies and libs.tech has files specific to the tools. All the libraries can be found at libs.ref.
 
-**Openlane Flow:** Inside Openlane directory parallel to pdk there is a file named flow.tcl.We need to Invoke flow.tcl on docker, which will start the flow and complete the RTL to gdsii flow, using -interactive switch we can interactivly control each step of the flow.
+**Openlane Flow:** Inside Openlane directory parallel to pdk there is a file named flow.tcl.We need to Invoke flow.tcl on docker, which will start the flow and complete the RTL to gdsii flow, using -interactive switch we can interactively control each step of the flow.
 Commands used:
 ```console
 docker
 flow.tcl -interactive
 ```
+![Openlane console](Images/D1_4.png)
+After invoking openlane flow we need to do following steps as a prerequisite to start working on the flow.
+•	**Loading the required openlane packages:** 
+```console 
+package require Openlane 0.9
+```
+0.9 is the version of openlane
+•	**Preparing directory structure:** Here we will set the design name using prep -design {design_name}, there is a directory named design parallel to flow.tcl, which contains all designs, inside any design we will have source file containing .v and .sdc file and configuration file to override default configuration.
+```console 
+prep -design {design_name} -tag {tag_name} -overwrite
+```
+If we want to work on a present tag of the design we can specify that using -tag switch.
 
+We can run synthesis using =='run_synthesis'== command.
