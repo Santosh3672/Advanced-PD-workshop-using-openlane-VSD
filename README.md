@@ -1,8 +1,8 @@
 # Advanced-PD-workshop-using-openlane-VSD
 ## This repo contains all the learnings and labs on Advanced PD workshop by VSD. It contains all the informations on RTL to GDSII implementation of a PICORV32 design using openlane flow.
 # Table of content
- - [Day 1 Inception of open-source EDA, OpenLANE and Sky130 PDK](#day1-inception-of-open-source-eda-openlane-and-sky130-pdk)
-  - [Introduction]
+- [Day 1 Inception of open-source EDA, OpenLANE and Sky130 PDK](#day1-inception-of-open-source-eda-openlane-and-sky130-pdk)
+ - [Introduction](#introduction)
  - [Day 2]
  - [Day 3]
  - [Day 4]
@@ -60,3 +60,5 @@ After that we can see that inside design directory for the given design there wi
 Statistics of the synthesized design. 
 Area of design: 198775.6416.
 Total cells: 20234.
+
+#Day2: Good floorplan vs bad floorplan
