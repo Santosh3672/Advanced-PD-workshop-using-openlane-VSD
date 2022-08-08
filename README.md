@@ -145,6 +145,47 @@ We can see endcap cells, tap cells, std cells, and pg grid being made.
 
 ## Cell design flow:
 
+As discussed earlier we have library of the std cells with different varieties and each have multiple models for different tools. The cell design flow is discussed here. 
+![](Images/D2_15.png) \
+For cell design flow we need inputs those are PDKs, DRC & LVS rules (required by foundry), SPICE models (with all physical parameters), library and user defined specs.
+Dimension of cell: the height of the cell should be same for all cells so that VSS and VDD will be laid. Width of the cell can be varied wider cells for high drive strength cells. 
+Supply voltage: It will be determined by the user (top level designer) and cell designer has to design cells based on that voltage. 
+Metal layers: It could be on M1 or M2 or M3 based on user requirement.
+Then based on the given input cell designer will start designing cell. Designer does spice simulation to design circuit like makil w/l of pmos double w/l of nmos, selecting w/l ratio for desired Id value. After which CDL(circuit descriptive language) is given as output.  
+Post that layout design will start. To design layout we first get the CMOS design of the circuit with PMOS and NMOS. Then derive the graphs of PMOS and NMOS network as shown below. 
+![](Images/D2_16.png) \
+Here we are discussing about Euler’s path + stick diagram method which gives layout with best performance and best area. In this method after we derive network graph we derive Euler’s path which is the path that is traversed once. For above example it is A-C-E-F-D-B.
+Then we create a stick diagram of the order of Euler’s path and make connection according to the design. Post that we convert it to layout while adhering to the foundry rules and user input rules.
+![](Images/D2_17.png) \
+
+With the final layout completed we will produce its GDSII, LED and extract its spice netlist (.cir).
+After layout we need to the do cell characterization. Steps included in this process are:
+1.	Read the model files 
+2.	Read the extracted spice netlist
+3.	Recognize the behavior of the cell
+4.	Read the subcircuit of the cell
+5.	Attach the necessary power source
+6.	Apply the required stimulus.
+7.	Provide necessary output capacitance
+8.	Provide necessary simulation command (transient, DC, AC simulation)
+
+After all these steps we feed the configuration file to a characterization software called GUNA which will generate timing, power and noise characterization. 
+
+## Timing characterization
+
+In timing characterization we need to know the variables with which the GUNA software will model the cell, those variables are related to input waveform like:
+1. slew_low_rise_thr
+2. slew_low_fall_thr 
+3. slew_high_rise_thr
+4. slew_high_fall_thr 
+5. in_rise_thr
+6. in_fall_thr 
+7. out_rise_thr 
+8. out_fall_thr
+
+They contain the value at which we need to calculate the slew rate or delay. 
+For example we need to calculate the propagation delay for falling edge of a buffer and in_fall_thr and out_fall_thr are 50% each then we need to subtract the time when output is 50% with the time where input is 50%.  If we want to calculate delay from 40% of in_rise_thr then we can change this variable in GUNA configuration. Correct choice of delay is very important else we could get negative delay due to different slew rate of input and output. 
+For example, to calculate transition time we subtract time on slew_high__rise_thr with time on slew_low_rise_thr. 
 
 # Day3: Design library cell using Magic Layout and ngspice characterization
 # Day4: Pre-layout timing analysis and importance of good clock tree
