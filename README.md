@@ -21,6 +21,12 @@ This repo contains all the learnings and labs on Advanced PD workshop by VSD. It
   - [Inverter design using openlane](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#inverter-design-using-openlane)
   - [Cell characterization from NGspice waveform](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#cell-characterization-from-ngspice-waveform)
 - [Day4: Pre-layout timing analysis and importance of good clock tree](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#day4-pre-layout-timing-analysis-and-importance-of-good-clock-tree)
+  - [Timing model using delay table](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#timing-model-using-delay-table)
+  - [Setup timing analysis (with ideal clock)](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#setup-timing-analysis-with-ideal-clock)
+  - [Clock jitter] (https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#clock-jitter)
+  - [Using the created standard cell in Picorv32a design](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#using-the-created-standard-cell-in-picorv32a-design)
+  - [Clock Tree Synthesis] (https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#clock-tree-synthesis)
+  - [Timing analysis after CTS with real Clocks]()
 - [Day5: Final steps for RTL2GDS using tritonRoute and openSTA](https://github.com/Santosh3672/Advanced-PD-workshop-using-openlane-VSD/blob/main/README.md#day5-final-steps-for-rtl2gds-using-tritonroute-and-opensta)
  
 # Day1: Inception of open-source EDA, OpenLANE and Sky130 PDK
@@ -284,7 +290,7 @@ Post that I changed the strategy to Delay 0 which focuses more on reducing delay
 |     After     	|     DELAY 0                 	|     0           	|     0           	|     196832.528     	|
 
 We can see that when tool focuses on delay(with DELAY 0 strategy), area is not priority hence the paths are made timing clean by increasing area. \
- ![](Images/D4_1.png) \
+ ![](Images/D4_1.png)
 ## Clock tree synthesis:
 It is the step where we connect clock port with all the sequential elements of the design. The main objective is to reduce skew of the clocks. For which H-tree is and effective method. In this method we create clock in H shape and iteratively create other branches in H shape. This method ensures that the wire length to all flops is similar. \
 After H-tree is created we need to add repeaters at regular interval so that the shape of the clock signal is not distorted due to the high capacitance of the clock path. \
@@ -293,7 +299,7 @@ Post that we need to do timing analysis with the real clocks with skews. \
 *Clock net shielding:* Clocks nets are critical nets and we don’t want it to be affected by crosstalk from other nets. To do that we shield the clock net with additional layer. This protects the clock nets from glitch (causing serious problems) and delta delay(increasing skew) effect. \
  ![](Images/D4_5.png) \
  Shielding breaks the coupling capacitance between critical and other nets. After shielding the clock nets we can do static timing analysis on the design. \
-The command to run cts in Openlane is `run_cts`: some of its configuration settings are `CTS_TARGET_SKEW`( target skew in ps), `CTS_ROOT_BUFFER`(name of cell inserted in tree), `CLOCK_TREE_SYNTH`(enable cts for triton cts), `CTS_TOLERANCE` (tradeoff between qor and runtime) \
+The command to run cts in Openlane is `run_cts`: some of its configuration settings are `CTS_TARGET_SKEW`( target skew in ps), `CTS_ROOT_BUFFER`(name of cell inserted in tree), `CLOCK_TREE_SYNTH`(enable cts for triton cts), `CTS_TOLERANCE` (tradeoff between qor and runtime) 
 ```console
 	run_stc
 ```
@@ -301,15 +307,17 @@ After running cts flow it creates another netlist named as `{design name}.synthe
  ![](Images/D4_6.PNG) \
  ![](Images/D4_7.PNG) \
 All the command run before like run_synthesis, run_placement, etc are procs of tcl which is similar to functions. They are present in scripts/tcl_commands/ inside the Openlane directrory. \
+ ![](Images/D4_8.PNG) 
+## Timing analysis after CTS with real Clocks
 Static timing analysis after CTS becomes more practical, now the difference launch and capture clock edge will be different from the time period by the value of clock skew. \
 Now, setup requirement is: 
 ```console
 (θ + D1) < (T + D2) – S – SU
 ```
-Where, D1 and D2 are launch and capture clock arrival time respectively. 
-LHS of above equation is data arrival time and RHS is data required time. Data required time subtracted by data arrival time is called slack which should be positive for above equation to hold.
-With real clock we must also check hold violations. Hold time is the minimum time required for the input of a flop to be stable after a clock edge has been passed so we analyse for same clock edges of launch and capture flop. In ideal case the equation becomes:
-`Θ > H`, where H is the hold time of the flop. 
+Where, D1 and D2 are launch and capture clock arrival time respectively. \
+LHS of above equation is data arrival time and RHS is data required time. Data required time subtracted by data arrival time is called slack which should be positive for above equation to hold. \
+With real clock we must also check hold violations. Hold time is the minimum time required for the input of a flop to be stable after a clock edge has been passed so we analyse for same clock edges of launch and capture flop. In ideal case the equation becomes: \
+`Θ > H`, where H is the hold time of the flop.  \
 In CTS design with real clocks, the equation becomes,
 ```console
 Θ + D1 > H + D2
