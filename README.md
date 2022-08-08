@@ -64,7 +64,9 @@ Total cells: 20234
 # Day2: Good floorplan vs bad floorplan
 ## Deciding utilization ratio and aspect ratio:
 If we add the area of all the std cells in the design and make a floor plan with a core size of that number then it will have utilization ratio of 100%. \
-<img src="Images/D2_1.png" width="300 align='centre'"> \
+<p align="center">
+<img src="Images/D2_1.png" width="300"> \
+</p>
 Utilization factor is defined as: \
 **Utilization factor** = Area occupied by the netlist / total area of core. \
 100% utilization is not practical as there is no room left for other cells and routing. \
